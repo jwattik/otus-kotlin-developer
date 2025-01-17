@@ -1,10 +1,13 @@
-pluginManagement {
-    val kotlinVersion: String by settings
-
-    plugins {
-        kotlin("jvm") version kotlinVersion
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
     }
 }
 
 rootProject.name = "otus-kotlin-developer"
-include("m1l1-first")
+
+includeBuild("build-plugin")
+
+includeBuild("ok-lessons")
+
+includeBuild("ok-messenger-be")
