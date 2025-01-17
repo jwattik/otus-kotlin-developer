@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.multiplatform) apply false
 }
 
-group = "ru.otus"
+group = "ru.otus.lessons"
 version = "0.0.1"
 
 subprojects {
