@@ -1,0 +1,403 @@
+openapi: 3.0.4
+info:
+  title: "Messenger ${VERSION_APP}"
+  version: 1.0.0
+  description: Программное обеспечение для обмена информацией между пользователями.
+servers:
+  - url: http://localhost:8080/api/v1
+paths:
+  /chat/create:
+    post:
+      tags:
+        - Chat
+      summary: Создать новый чат
+      operationId: createChat
+      requestBody:
+        description: Запрос на создание чата
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatCreateRequest'
+      responses:
+        '200':
+          description: Чат успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCreateResponse'
+  /chat/read:
+    post:
+      tags:
+        - Chat
+      summary: Получить чат по ID
+      operationId: readChat
+      requestBody:
+        description: Запрос на получение чата
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatReadRequest'
+      responses:
+        '200':
+          description: Информация о чате
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatReadResponse'
+  /chat/search:
+    post:
+      tags:
+        - Chat
+      summary: Поиск чатов
+      operationId: searchChats
+      requestBody:
+        description: Запрос на поиск чатов по заданным критериям
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatSearchRequest'
+      responses:
+        '200':
+          description: Список найденных чатов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatSearchResponse'
+  /chat/update:
+    post:
+      tags:
+        - Chat
+      summary: Обновить чат
+      operationId: updateChat
+      requestBody:
+        description: Запрос на обновление информации о чате
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatUpdateRequest'
+      responses:
+        '200':
+          description: Чат успешно обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatUpdateResponse'
+  /chat/delete:
+    post:
+      tags:
+        - Chat
+      summary: Архивировать (удалить) чат
+      operationId: deleteChat
+      requestBody:
+        description: Запрос на архивирование чата
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatDeleteRequest'
+      responses:
+        '200':
+          description: Чат успешно архивирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatDeleteResponse'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        fieldName:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    # Интерфейс реквеста
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/ChatCreateRequest'
+          read: '#/components/schemas/ChatReadRequest'
+          search: '#/components/schemas/ChatSearchRequest'
+          update: '#/components/schemas/ChatUpdateRequest'
+          delete: '#/components/schemas/ChatDeleteRequest'
+
+    # Интерфейс респонса
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/ChatCreateResponse'
+          read: '#/components/schemas/ChatReadResponse'
+          search: '#/components/schemas/ChatSearchResponse'
+          update: '#/components/schemas/ChatUpdateResponse'
+          delete: '#/components/schemas/ChatDeleteResponse'
+
+    # Основная схема объекта Chat
+    Chat:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Уникальный идентификатор чата (UUID)
+        title:
+          type: string
+          description: Название чата
+        description:
+          type: string
+          description: Описание чата
+        type:
+          type: string
+          enum: [private, group, channel]
+          description: Тип чата
+        mode:
+          type: string
+          enum: [work, personal]
+          description: Режим чата
+        owner_id:
+          type: string
+          description: Уникальный идентификатор владельца (UUID)
+        participants:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+          description: Список участников (user IDs)
+        created_at:
+          type: string
+          format: date-time
+          description: Дата создания чата
+        updated_at:
+          type: string
+          format: date-time
+          description: Дата обновления чата
+        is_archived:
+          type: boolean
+          description: Флаг архивации чата
+        metadata:
+          type: string
+          format: json
+          description: Дополнительные данные (например, project_id, jira_link и пр.)
+
+    # --- Создание чата ---
+    ChatCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/RequestDebug'
+        - type: object
+          properties:
+            chat:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Название чата
+                description:
+                  type: string
+                  description: Описание чата
+                type:
+                  type: string
+                  enum: [private, group, channel]
+                  description: Тип чата
+                mode:
+                  type: string
+                  enum: [work, personal]
+                  description: Режим чата
+                owner_id:
+                  type: string
+                  description: Уникальный идентификатор владельца (UUID)
+                participants:
+                  type: array
+                  uniqueItems: true
+                  items:
+                    type: string
+                  description: Список идентификаторов участников
+                metadata:
+                  type: string
+                  format: json
+                  description: Дополнительные данные (необязательно)
+
+    ChatCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - type: object
+          properties:
+            chat:
+              $ref: '#/components/schemas/Chat'
+
+    # --- Чтение чата ---
+    ChatReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/RequestDebug'
+        - type: object
+          properties:
+            chatId:
+              type: string
+              description: Идентификатор чата для чтения
+              example: string
+
+    ChatReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - type: object
+          properties:
+            chat:
+              $ref: '#/components/schemas/Chat'
+
+    # --- Поиск чатов ---
+    ChatSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/RequestDebug'
+        - type: object
+          properties:
+            criteria:
+              type: object
+              description: Критерии поиска чатов
+              properties:
+                title:
+                  type: string
+                  description: Поиск по названию
+                type:
+                  type: string
+                  enum: [private, group, channel]
+                  description: Поиск по типу чата
+                mode:
+                  type: string
+                  enum: [work, personal]
+                  description: Поиск по режиму чата
+                participant:
+                  type: string
+                  description: Поиск по участнику (ID пользователя)
+
+    ChatSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - type: object
+          properties:
+            chats:
+              type: array
+              items:
+                $ref: '#/components/schemas/Chat'
+
+    # --- Обновление чата ---
+    ChatUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/RequestDebug'
+        - type: object
+          properties:
+            chat:
+              type: object
+              properties:
+                chatId:
+                  type: string
+                  description: Идентификатор чата для обновления
+                title:
+                  type: string
+                  description: Новое название чата
+                description:
+                  type: string
+                  description: Новое описание чата
+                mode:
+                  type: string
+                  enum: [work, personal]
+                  description: Новый режим чата
+                is_archived:
+                  type: boolean
+                  description: Флаг архивации (если требуется)
+                metadata:
+                  type: string
+                  format: json
+                  description: Дополнительные данные
+
+    ChatUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - type: object
+          properties:
+            chat:
+              $ref: '#/components/schemas/Chat'
+
+    # --- Архивирование (удаление) чата ---
+    ChatDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/RequestDebug'
+        - type: object
+          properties:
+            chatId:
+              type: string
+              description: Идентификатор чата для архивирования
+
+    ChatDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+
+    # STUBS ======================
+    DebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    RequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/Debug'
+
+    Debug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/DebugMode'
+        stub:
+          $ref: '#/components/schemas/DebugStubs'
+
+    DebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - cannotDelete
+        - valueError
+        - missingData

@@ -23,4 +23,6 @@ rootProject.name = "ok-messenger-be"
 
 //enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include(":ok-messenger-tmp")
+include(":ok-messenger-api-v1")
+include(":ok-messenger-api-v1-mappers")
+include(":ok-messenger-common")
