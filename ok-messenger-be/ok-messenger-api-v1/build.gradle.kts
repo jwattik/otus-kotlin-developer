@@ -44,8 +44,9 @@ openApiGenerate {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation(libs.kotlin.jackson.module)
-    implementation(libs.kotlin.jackson.datatype)
+    implementation(libs.kotlin.datetime)
+    implementation(libs.jackson.kotlin)
+    implementation(libs.jackson.datatype)
     testImplementation(kotlin("test-junit"))
 }
 

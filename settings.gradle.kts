@@ -11,3 +11,5 @@ includeBuild("build-plugin")
 includeBuild("ok-lessons")
 
 includeBuild("ok-messenger-be")
+
+includeBuild("ok-messenger-libs")
