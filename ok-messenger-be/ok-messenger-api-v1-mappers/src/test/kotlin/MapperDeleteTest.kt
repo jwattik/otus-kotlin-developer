@@ -9,7 +9,7 @@ import ru.otus.messenger.api.v1.models.Debug
 import ru.otus.messenger.api.v1.models.DebugMode
 import ru.otus.messenger.api.v1.models.DebugStubs
 import ru.otus.messenger.api.v1.models.ResponseResult
-import ru.otus.messenger.common.ChatContext
+import ru.otus.messenger.common.MessengerContext
 import ru.otus.messenger.common.models.ChatCommand
 import ru.otus.messenger.common.models.ChatError
 import ru.otus.messenger.common.models.ChatMode
@@ -30,7 +30,7 @@ class MapperDeleteTest {
             chatId = "chat-id",
         )
 
-        val context = ChatContext()
+        val context = MessengerContext()
         context.fromTransport(req)
 
         assertEquals(Stubs.SUCCESS, context.stubCase)
@@ -43,7 +43,7 @@ class MapperDeleteTest {
 
     @Test
     fun toTransport() {
-        val context = ChatContext(
+        val context = MessengerContext(
             requestId = RequestId(UUID.randomUUID().toString()),
             command = ChatCommand.DELETE,
             state = ChatState.RUNNING,

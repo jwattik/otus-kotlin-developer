@@ -3,44 +3,56 @@ package ru.otus.messenger.api.v1.mappers
 import kotlinx.datetime.Instant
 import ru.otus.messenger.api.v1.models.*
 import ru.otus.messenger.common.models.*
-import ru.otus.messenger.common.ChatContext
+import ru.otus.messenger.common.MessengerContext
 import ru.otus.messenger.common.NONE
 import ru.otus.messenger.common.exceptions.UnknownChatCommand
 
 
-fun ChatContext.toTransportChat(): IResponse = when (val cmd = command) {
+fun MessengerContext.toTransportChat(): IResponse = when (val cmd = command) {
     ChatCommand.CREATE -> toTransportCreate()
     ChatCommand.READ -> toTransportRead()
     ChatCommand.DELETE -> toTransportDelete()
     ChatCommand.SEARCH -> toTransportSearch()
     ChatCommand.UPDATE -> toTransportUpdate()
+    ChatCommand.INIT -> toTransportInit()
+    ChatCommand.FINISH -> toTransportFinish()
     ChatCommand.NONE -> throw UnknownChatCommand(cmd)
 }
 
-fun ChatContext.toTransportCreate() = ChatCreateResponse(
+fun MessengerContext.toTransportInit() = ChatInitResponse(
+    result = state.toResult(),
+    errors = errors.toTransportErrors(),
+)
+
+fun MessengerContext.toTransportFinish() = ChatInitResponse(
+    result = state.toResult(),
+    errors = errors.toTransportErrors(),
+)
+
+fun MessengerContext.toTransportCreate() = ChatCreateResponse(
     result = state.toResult(),
     errors = errors.toTransportErrors(),
     chat = chatResponse.toTransportChat()
 )
 
-fun ChatContext.toTransportRead() = ChatReadResponse(
+fun MessengerContext.toTransportRead() = ChatReadResponse(
     result = state.toResult(),
     errors = errors.toTransportErrors(),
     chat = chatResponse.toTransportChat()
 )
 
-fun ChatContext.toTransportDelete() = ChatDeleteResponse(
+fun MessengerContext.toTransportDelete() = ChatDeleteResponse(
     result = state.toResult(),
     errors = errors.toTransportErrors(),
 )
 
-fun ChatContext.toTransportSearch() = ChatSearchResponse(
+fun MessengerContext.toTransportSearch() = ChatSearchResponse(
     result = state.toResult(),
     errors = errors.toTransportErrors(),
     chats = chatsResponse.toTransportChats()
 )
 
-fun ChatContext.toTransportUpdate() = ChatUpdateResponse(
+fun MessengerContext.toTransportUpdate() = ChatUpdateResponse(
     result = state.toResult(),
     errors = errors.toTransportErrors(),
     chat = chatResponse.toTransportChat()

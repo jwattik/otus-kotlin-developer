@@ -7,4 +7,6 @@ enum class ChatCommand {
     DELETE,
     SEARCH,
     UPDATE,
+    INIT,
+    FINISH,
 }

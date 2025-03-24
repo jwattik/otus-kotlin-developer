@@ -14,7 +14,7 @@ dependencies {
 
     // Homework Hard
     implementation(libs.okhttp) // http client
-    implementation(libs.kotlin.jackson.module) // from string to object
+    implementation(libs.jackson.kotlin) // from string to object
 
     testImplementation(kotlin("test"))
 }

@@ -167,6 +167,8 @@ components:
           search: '#/components/schemas/ChatSearchResponse'
           update: '#/components/schemas/ChatUpdateResponse'
           delete: '#/components/schemas/ChatDeleteResponse'
+          init: '#/components/schemas/ChatInitResponse'
+          finish: '#/components/schemas/ChatFinishResponse'
 
     # Основная схема объекта Chat
     Chat:
@@ -367,6 +369,14 @@ components:
               description: Идентификатор чата для архивирования
 
     ChatDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+
+    ChatInitResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+
+    ChatFinishResponse:
       allOf:
         - $ref: '#/components/schemas/IResponse'
 

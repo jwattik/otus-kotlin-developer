@@ -5,10 +5,10 @@ import kotlinx.serialization.json.jsonObject
 import ru.otus.messenger.api.v1.mappers.exceptions.UnknownRequestClass
 import ru.otus.messenger.api.v1.models.*
 import ru.otus.messenger.common.models.*
-import ru.otus.messenger.common.ChatContext
+import ru.otus.messenger.common.MessengerContext
 import ru.otus.messenger.common.stubs.Stubs
 
-fun ChatContext.fromTransport(request: IRequest) = when (request) {
+fun MessengerContext.fromTransport(request: IRequest) = when (request) {
     is ChatCreateRequest -> fromTransport(request)
     is ChatReadRequest -> fromTransport(request)
     is ChatDeleteRequest -> fromTransport(request)
@@ -40,35 +40,35 @@ private fun Debug?.transportToStubCase(): Stubs = when (this?.stub) {
     null -> Stubs.NONE
 }
 
-fun ChatContext.fromTransport(request: ChatCreateRequest) {
+fun MessengerContext.fromTransport(request: ChatCreateRequest) {
     command = ChatCommand.CREATE
     chatRequest = request.chat?.toInternal() ?: MessengerChat()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
 
-fun ChatContext.fromTransport(request: ChatReadRequest) {
+fun MessengerContext.fromTransport(request: ChatReadRequest) {
     command = ChatCommand.READ
     chatRequest = request.chatId.toChatId().toInternal()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
 
-fun ChatContext.fromTransport(request: ChatDeleteRequest) {
+fun MessengerContext.fromTransport(request: ChatDeleteRequest) {
     command = ChatCommand.DELETE
     chatRequest = request.chatId.toChatId().toInternal()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
 
-fun ChatContext.fromTransport(request: ChatUpdateRequest) {
+fun MessengerContext.fromTransport(request: ChatUpdateRequest) {
     command = ChatCommand.UPDATE
     chatRequest = request.chat?.toInternal() ?: MessengerChat()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
 
-fun ChatContext.fromTransport(request: ChatSearchRequest) {
+fun MessengerContext.fromTransport(request: ChatSearchRequest) {
     command = ChatCommand.SEARCH
     chatRequest = request.criteria?.toInternal() ?: MessengerChat()
     workMode = request.debug.transportToWorkMode()
