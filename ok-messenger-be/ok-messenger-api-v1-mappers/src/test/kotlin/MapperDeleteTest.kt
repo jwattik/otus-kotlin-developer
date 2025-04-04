@@ -17,7 +17,7 @@ import ru.otus.messenger.common.models.ChatState
 import ru.otus.messenger.common.models.ChatType
 import ru.otus.messenger.common.models.RequestId
 import ru.otus.messenger.common.models.WorkMode
-import ru.otus.messenger.common.stubs.Stubs
+import ru.otus.messenger.common.stubs.MessengerStubs
 
 class MapperDeleteTest {
     @Test
@@ -33,7 +33,7 @@ class MapperDeleteTest {
         val context = MessengerContext()
         context.fromTransport(req)
 
-        assertEquals(Stubs.SUCCESS, context.stubCase)
+        assertEquals(MessengerStubs.SUCCESS, context.stubCase)
         assertEquals(WorkMode.STUB, context.workMode)
         assertEquals("", context.chatRequest.title)
         assertEquals("chat-id", context.chatRequest.id.asString())

@@ -1,13 +1,19 @@
 package ru.otus.messenger.api.v1
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import java.text.SimpleDateFormat
 import ru.otus.messenger.api.v1.models.IRequest
 import ru.otus.messenger.api.v1.models.IResponse
 
 val apiV1Mapper: JsonMapper = JsonMapper.builder().run {
+    addModule(KotlinModule.Builder().build())
     configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    defaultDateFormat(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"))
+    serializationInclusion(Include.NON_NULL)
     enable(MapperFeature.USE_BASE_TYPE_AS_DEFAULT_IMPL)
     build()
 }

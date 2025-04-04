@@ -18,6 +18,8 @@ data class MessengerChat(
 ) {
     fun isEmpty() = this == NONE
 
+    fun deepCopy(): MessengerChat = copy()
+
     companion object {
         private val NONE = MessengerChat()
     }

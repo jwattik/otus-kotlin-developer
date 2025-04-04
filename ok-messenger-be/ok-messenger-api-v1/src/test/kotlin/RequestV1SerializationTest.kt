@@ -16,7 +16,7 @@ class RequestV1SerializationTest {
             title = "New chat",
             type = ChatCreateRequestAllOfChat.Type.GROUP,
             mode = ChatCreateRequestAllOfChat.Mode.PERSONAL,
-            participants = emptyList(),
+            participants = emptySet(),
             metadata = """
                 {
                     "isOwner": true,
