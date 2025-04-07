@@ -20,7 +20,7 @@ import ru.otus.messenger.common.models.ChatType
 import ru.otus.messenger.common.models.MessengerChat
 import ru.otus.messenger.common.models.RequestId
 import ru.otus.messenger.common.models.WorkMode
-import ru.otus.messenger.common.stubs.Stubs
+import ru.otus.messenger.common.stubs.MessengerStubs
 
 class MapperSearchTest {
     @Test
@@ -41,7 +41,7 @@ class MapperSearchTest {
         val context = MessengerContext()
         context.fromTransport(req)
 
-        assertEquals(Stubs.SUCCESS, context.stubCase)
+        assertEquals(MessengerStubs.SUCCESS, context.stubCase)
         assertEquals(WorkMode.STUB, context.workMode)
         assertEquals("title", context.chatRequest.title)
         assertEquals(ChatType.PRIVATE, context.chatRequest.type)

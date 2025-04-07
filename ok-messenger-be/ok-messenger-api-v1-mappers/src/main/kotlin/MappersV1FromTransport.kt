@@ -6,7 +6,7 @@ import ru.otus.messenger.api.v1.mappers.exceptions.UnknownRequestClass
 import ru.otus.messenger.api.v1.models.*
 import ru.otus.messenger.common.models.*
 import ru.otus.messenger.common.MessengerContext
-import ru.otus.messenger.common.stubs.Stubs
+import ru.otus.messenger.common.stubs.MessengerStubs
 
 fun MessengerContext.fromTransport(request: IRequest) = when (request) {
     is ChatCreateRequest -> fromTransport(request)
@@ -31,13 +31,13 @@ private fun Debug?.transportToWorkMode(): WorkMode = when (this?.mode) {
     null -> WorkMode.PROD
 }
 
-private fun Debug?.transportToStubCase(): Stubs = when (this?.stub) {
-    DebugStubs.SUCCESS -> Stubs.SUCCESS
-    DebugStubs.NOT_FOUND -> Stubs.NOT_FOUND
-    DebugStubs.VALUE_ERROR -> Stubs.VALUE_ERROR
-    DebugStubs.MISSING_DATA -> Stubs.MISSING_DATA
-    DebugStubs.CANNOT_DELETE -> Stubs.CANNOT_DELETE
-    null -> Stubs.NONE
+private fun Debug?.transportToStubCase(): MessengerStubs = when (this?.stub) {
+    DebugStubs.SUCCESS -> MessengerStubs.SUCCESS
+    DebugStubs.NOT_FOUND -> MessengerStubs.NOT_FOUND
+    DebugStubs.VALUE_ERROR -> MessengerStubs.VALUE_ERROR
+    DebugStubs.MISSING_DATA -> MessengerStubs.MISSING_DATA
+    DebugStubs.CANNOT_DELETE -> MessengerStubs.CANNOT_DELETE
+    null -> MessengerStubs.NONE
 }
 
 fun MessengerContext.fromTransport(request: ChatCreateRequest) {

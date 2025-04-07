@@ -1,6 +1,5 @@
 package ru.otus.messenger.stubs
 
-import ru.otus.messenger.common.models.ChatMode
 import ru.otus.messenger.common.models.ChatType
 import ru.otus.messenger.common.models.MessengerChat
 import ru.otus.messenger.stubs.MessengerChatStubSample.CHAT_SAMPLE_1
@@ -14,9 +13,8 @@ object MessengerChatStub {
     fun prepareSearchList(
         chatTitle: String,
         chatType: ChatType,
-        chatMode: ChatMode,
     ) = listOf(
         CHAT_SAMPLE_1,
         CHAT_SAMPLE_2
-    ).filter { it.title == chatTitle && it.type == chatType && it.mode == chatMode }
+    ).filter { it.title == chatTitle && it.type == chatType }
 }

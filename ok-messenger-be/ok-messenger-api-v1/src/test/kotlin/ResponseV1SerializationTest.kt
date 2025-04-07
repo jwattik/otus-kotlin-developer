@@ -16,7 +16,7 @@ class ResponseV1SerializationTest {
             title = "Test chat title",
             type = Chat.Type.CHANNEL,
             mode = Chat.Mode.WORK,
-            participants = emptyList(),
+            participants = emptySet(),
             createdAt = Instant.now().toString(),
             isArchived = false,
             metadata = null

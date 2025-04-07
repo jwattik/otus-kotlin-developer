@@ -24,3 +24,4 @@ plugins {
 }
 
 include(":ok-messenger-lib-logging")
+include(":ok-messenger-lib-cor")
