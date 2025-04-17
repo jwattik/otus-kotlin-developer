@@ -45,7 +45,7 @@ class ControllerTest {
         }
     }
 
-    private suspend fun TestApplicationCall.createReport(appSettings: MessengerAppSettings) {
+    private suspend fun TestApplicationCall.createChat(appSettings: MessengerAppSettings) {
         val response = appSettings.controllerHelper(
             { fromTransport(receive<ChatCreateRequest>()) },
             { toTransportChat() },
@@ -57,7 +57,7 @@ class ControllerTest {
 
     @Test
     fun ktorHelperTest() = runTest {
-        val testApp = TestApplicationCall(request).apply { createReport(appSettings) }
+        val testApp = TestApplicationCall(request).apply { createChat(appSettings) }
         val response = testApp.response as ChatCreateResponse
         assertEquals(ResponseResult.SUCCESS, response.result)
     }

@@ -13,4 +13,6 @@ dependencies {
 
     testImplementation(kotlin("test-junit"))
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(project(":ok-messenger-repo-tests"))
+    testImplementation(project(":ok-messenger-repo-inmemory"))
 }

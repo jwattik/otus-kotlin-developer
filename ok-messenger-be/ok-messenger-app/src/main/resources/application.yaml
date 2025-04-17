@@ -8,3 +8,14 @@ ktor:
   application:
     modules:
       - ru.otus.messenger.app.ApplicationKt.module
+  logger: logback
+
+messenger:
+  repository:
+    test: "inmemory"
+    prod: "$DB_TYPE_PROD:inmemory"
+    db:
+      host: "$DB_HOST:localhost"
+      port: "$DB_PORT:8443"
+      user: "$DB_USER:default"
+      password: "$DB_PASS:pass"
