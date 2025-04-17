@@ -3,7 +3,6 @@ package ru.otus.messenger.biz.validation
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
-import kotlinx.coroutines.test.runTest
 import ru.otus.messenger.biz.MessengerProcessor
 import ru.otus.messenger.common.MessengerContext
 import ru.otus.messenger.common.models.ChatCommand
@@ -11,7 +10,7 @@ import ru.otus.messenger.common.models.ChatState
 import ru.otus.messenger.common.models.WorkMode
 import ru.otus.messenger.stubs.MessengerChatStub
 
-fun validationTitleCorrect(command: ChatCommand, processor: MessengerProcessor) = runTest {
+fun validationTitleCorrect(command: ChatCommand, processor: MessengerProcessor) = runBizTest {
     val ctx = MessengerContext(
         command = command,
         state = ChatState.NONE,
@@ -21,12 +20,13 @@ fun validationTitleCorrect(command: ChatCommand, processor: MessengerProcessor) 
         },
     )
     processor.exec(ctx)
+    println(ctx.errors.joinToString("\n"))
     assertEquals(0, ctx.errors.size)
     assertNotEquals(ChatState.FAILING, ctx.state)
     assertEquals("abc", ctx.chatValidated.title)
 }
 
-fun validationTitleTrim(command: ChatCommand, processor: MessengerProcessor) = runTest {
+fun validationTitleTrim(command: ChatCommand, processor: MessengerProcessor) = runBizTest {
     val ctx = MessengerContext(
         command = command,
         state = ChatState.NONE,
@@ -41,7 +41,7 @@ fun validationTitleTrim(command: ChatCommand, processor: MessengerProcessor) = r
     assertEquals("abc", ctx.chatValidated.title)
 }
 
-fun validationTitleEmpty(command: ChatCommand, processor: MessengerProcessor) = runTest {
+fun validationTitleEmpty(command: ChatCommand, processor: MessengerProcessor) = runBizTest {
     val ctx = MessengerContext(
         command = command,
         state = ChatState.NONE,
@@ -58,7 +58,7 @@ fun validationTitleEmpty(command: ChatCommand, processor: MessengerProcessor) = 
     assertContains(error?.message ?: "", "title")
 }
 
-fun validationTitleSymbols(command: ChatCommand, processor: MessengerProcessor) = runTest {
+fun validationTitleSymbols(command: ChatCommand, processor: MessengerProcessor) = runBizTest {
     val ctx = MessengerContext(
         command = command,
         state = ChatState.NONE,

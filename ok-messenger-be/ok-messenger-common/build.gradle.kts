@@ -2,9 +2,6 @@ plugins {
     id("build-jvm")
 }
 
-group = rootProject.group
-version = rootProject.version
-
 sourceSets {
     main {
         java.srcDir("src/commonMain/kotlin")
@@ -13,8 +10,10 @@ sourceSets {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation(libs.kotlin.datetime)
+    api(libs.kotlin.datetime)
+    implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlin.coroutines)
     api("ru.otus.messenger.libs:ok-messenger-lib-logging")
 
     testImplementation(kotlin("test-junit"))

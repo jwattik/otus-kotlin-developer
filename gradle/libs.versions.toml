@@ -36,6 +36,11 @@ muschko = "9.4.0"
 jvm-compiler = "17"
 jvm-language = "21"
 
+uuid = "0.8.4"
+db-cache = "0.13.0"
+clickhouse-client = "0.8.1"
+mockk = "1.13.10"
+
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -109,3 +114,11 @@ logger-fluentd = { module = "org.fluentd:fluent-logger", version.ref = "fluentd"
 
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.13.2"
+
+# DB repo
+uuid = { module = "com.benasher44:uuid", version.ref = "uuid" }
+db-cache4k = { module = "io.github.reactivecircus.cache4k:cache4k", version.ref = "db-cache" }
+
+# DB
+clickhouse-client = { module = "com.clickhouse:client-v2", version.ref = "clickhouse-client"}
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }

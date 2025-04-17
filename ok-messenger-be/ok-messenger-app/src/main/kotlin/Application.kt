@@ -27,6 +27,7 @@ fun Application.module(
         anyHost()
     }
     configureHTTP()
+    configureMonitoring()
     configureSerialization()
 
     configureRouting(appSettings)

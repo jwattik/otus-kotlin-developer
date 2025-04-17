@@ -3,7 +3,7 @@ headers = curl/curl.h
 
 # You also need to specify linking parameters for different platforms
 compilerOpts.linux_x64 = -I/usr/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/
-linkerOpts.osx = -L/opt/homebrew/Cellar/curl/8.11.1/lib -L/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/ -lcurl
+linkerOpts.osx = -L/opt/homebrew/Cellar/curl/8.13.3/lib -L/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/ -lcurl
 linkerOpts.linux_x64 = -L/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/ -lcurl
 
 ---

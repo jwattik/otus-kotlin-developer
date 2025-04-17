@@ -14,13 +14,13 @@ fun MessengerContext.toLog(logId: String) = CommonLogModel(
 )
 
 private fun MessengerContext.toChatLog(): ChatLogModel? {
-    val emptyReport = MessengerChat()
+    val emptyChat = MessengerChat()
     return ChatLogModel(
         requestId = requestId.takeIf { it != RequestId.NONE }?.asString(),
-        requestChat = chatRequest.takeIf { it != emptyReport }?.toLog(),
+        requestChat = chatRequest.takeIf { it != emptyChat }?.toLog(),
         requestSearch = chatFilterRequest.takeIf { it != ChatSearchFilter.NONE }?.toLog(),
-        responseChat = chatResponse.takeIf { it != emptyReport }?.toLog(),
-        responseChats = chatsResponse.takeIf { it.isNotEmpty() }?.filter { it != emptyReport }?.map { it.toLog() },
+        responseChat = chatResponse.takeIf { it != emptyChat }?.toLog(),
+        responseChats = chatsResponse.takeIf { it.isNotEmpty() }?.filter { it != emptyChat }?.map { it.toLog() },
     ).takeIf { it != ChatLogModel() }
 }
 

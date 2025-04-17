@@ -3,7 +3,6 @@ package ru.otus.messenger.biz.validation
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
-import kotlinx.coroutines.test.runTest
 import ru.otus.messenger.biz.MessengerProcessor
 import ru.otus.messenger.common.MessengerContext
 import ru.otus.messenger.common.models.ChatCommand
@@ -12,7 +11,7 @@ import ru.otus.messenger.common.models.ChatState
 import ru.otus.messenger.common.models.WorkMode
 import ru.otus.messenger.stubs.MessengerChatStub
 
-fun validationIdCorrect(command: ChatCommand, processor: MessengerProcessor) = runTest {
+fun validationIdCorrect(command: ChatCommand, processor: MessengerProcessor) = runBizTest {
     val ctx = MessengerContext(
         command = command,
         state = ChatState.NONE,
@@ -24,7 +23,7 @@ fun validationIdCorrect(command: ChatCommand, processor: MessengerProcessor) = r
     assertNotEquals(ChatState.FAILING, ctx.state)
 }
 
-fun validationIdTrim(command: ChatCommand, processor: MessengerProcessor) = runTest {
+fun validationIdTrim(command: ChatCommand, processor: MessengerProcessor) = runBizTest {
     val ctx = MessengerContext(
         command = command,
         state = ChatState.NONE,
@@ -38,7 +37,7 @@ fun validationIdTrim(command: ChatCommand, processor: MessengerProcessor) = runT
     assertNotEquals(ChatState.FAILING, ctx.state)
 }
 
-fun validationIdEmpty(command: ChatCommand, processor: MessengerProcessor) = runTest {
+fun validationIdEmpty(command: ChatCommand, processor: MessengerProcessor) = runBizTest {
     val ctx = MessengerContext(
         command = command,
         state = ChatState.NONE,
@@ -55,7 +54,7 @@ fun validationIdEmpty(command: ChatCommand, processor: MessengerProcessor) = run
     assertContains(error?.message ?: "", "id")
 }
 
-fun validationIdFormat(command: ChatCommand, processor: MessengerProcessor) = runTest {
+fun validationIdFormat(command: ChatCommand, processor: MessengerProcessor) = runBizTest {
     val ctx = MessengerContext(
         command = command,
         state = ChatState.NONE,

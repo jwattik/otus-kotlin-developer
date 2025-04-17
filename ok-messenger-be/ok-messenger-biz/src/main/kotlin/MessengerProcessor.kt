@@ -1,9 +1,20 @@
 package ru.otus.messenger.biz
 
+import ru.otus.messenger.biz.general.initRepo
 import ru.otus.messenger.biz.general.initStatus
 import ru.otus.messenger.biz.general.operation
+import ru.otus.messenger.biz.general.prepareResult
 import ru.otus.messenger.biz.general.stubs
 import ru.otus.messenger.biz.general.validation
+import ru.otus.messenger.biz.repo.checkLock
+import ru.otus.messenger.biz.repo.repoCreate
+import ru.otus.messenger.biz.repo.repoDelete
+import ru.otus.messenger.biz.repo.repoPrepareCreate
+import ru.otus.messenger.biz.repo.repoPrepareDelete
+import ru.otus.messenger.biz.repo.repoPrepareUpdate
+import ru.otus.messenger.biz.repo.repoRead
+import ru.otus.messenger.biz.repo.repoSearch
+import ru.otus.messenger.biz.repo.repoUpdate
 import ru.otus.messenger.biz.stubs.stubCreateSuccess
 import ru.otus.messenger.biz.stubs.stubReadSuccess
 import ru.otus.messenger.biz.stubs.stubUpdateSuccess
@@ -27,6 +38,8 @@ import ru.otus.messenger.common.MessengerContext
 import ru.otus.messenger.common.MessengerCorSettings
 import ru.otus.messenger.common.models.ChatCommand
 import ru.otus.messenger.common.models.ChatId
+import ru.otus.messenger.common.models.ChatState
+import ru.otus.messenger.cor.dsl.chain
 import ru.otus.messenger.cor.dsl.rootChain
 import ru.otus.messenger.cor.dsl.worker
 
@@ -39,6 +52,7 @@ class MessengerProcessor(
 
     private val businessChain = rootChain<MessengerContext> {
         initStatus("Инициализация статуса")
+        initRepo("Инициализация репозитория")
 
         operation("Создание чата", ChatCommand.CREATE) {
             stubs("Обработка стабов") {
@@ -61,6 +75,13 @@ class MessengerProcessor(
 
                 finishChatValidation("Завершение проверок")
             }
+
+            chain {
+                title = "Логика сохранения"
+                repoPrepareCreate("Подготовка объекта для сохранения")
+                repoCreate("Создание чата в БД")
+            }
+            prepareResult("Подготовка ответа")
         }
 
         operation("Получить чат", ChatCommand.READ) {
@@ -79,6 +100,17 @@ class MessengerProcessor(
 
                 finishChatValidation("Успешное завершение процедуры валидации")
             }
+
+            chain {
+                title = "Логика чтения"
+                repoRead("Чтение чата из БД")
+                worker {
+                    title = "Подготовка ответа для Read"
+                    on { state == ChatState.RUNNING }
+                    handle { chatRepoDone = chatRepoRead }
+                }
+            }
+            prepareResult("Подготовка ответа")
         }
 
         operation("Изменить чат", ChatCommand.UPDATE) {
@@ -105,6 +137,15 @@ class MessengerProcessor(
 
                 finishChatValidation("Успешное завершение процедуры валидации")
             }
+
+            chain {
+                title = "Логика сохранения"
+                repoRead("Чтение чата из БД")
+                checkLock("Проверяем консистентность по оптимистичной блокировке")
+                repoPrepareUpdate("Подготовка объекта для обновления")
+                repoUpdate("Обновление чата в БД")
+            }
+            prepareResult("Подготовка ответа")
         }
 
         operation("Удалить чат", ChatCommand.DELETE) {
@@ -124,6 +165,15 @@ class MessengerProcessor(
                 validateIdProperFormat("Проверка формата id")
                 finishChatValidation("Успешное завершение процедуры валидации")
             }
+
+            chain {
+                title = "Логика удаления"
+                repoRead("Чтение чата из БД")
+                checkLock("Проверяем консистентность по оптимистичной блокировке")
+                repoPrepareDelete("Подготовка объекта для удаления")
+                repoDelete("Удаление чата из БД")
+            }
+            prepareResult("Подготовка ответа")
         }
 
         operation("Поиск чата", ChatCommand.SEARCH) {
@@ -140,6 +190,9 @@ class MessengerProcessor(
 
                 finishChatFilterValidation("Успешное завершение процедуры валидации")
             }
+
+            repoSearch("Поиск чата в БД по фильтру")
+            prepareResult("Подготовка ответа")
         }
     }.build()
 }
